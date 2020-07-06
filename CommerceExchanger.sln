@@ -1,0 +1,50 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{1C224974-28C6-40CB-AF50-DDA8B8C50074}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{14EC08F2-D32A-4E7D-8FCC-7F07F87274D8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommerceExchanger.Core.Test", "test\CommerceExchanger.Core.Test\CommerceExchanger.Core.Test.csproj", "{D20DCB18-E290-4835-890F-77DC9DE0E121}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "core", "core", "{1D48773F-1C4A-465C-B21C-9971948A788D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommerceExchanger.Core", "src\core\CommerceExchanger.Core\CommerceExchanger.Core.csproj", "{B64FA621-6E2F-40F6-9BC6-9BD197780F15}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "web", "web", "{CF74D106-164B-4A52-ADE3-3C6843BBC78D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommerceExchanger.Web", "src\web\CommerceExchanger.Web\CommerceExchanger.Web.csproj", "{B5FD78BF-1435-48EE-82F8-F67F29C9E96C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommerceExchanger.Utils", "src\core\CommerceExchanger.Utils\CommerceExchanger.Utils.csproj", "{ABB12A97-2F51-4942-B89D-58AAEAA50CAF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D20DCB18-E290-4835-890F-77DC9DE0E121}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D20DCB18-E290-4835-890F-77DC9DE0E121}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D20DCB18-E290-4835-890F-77DC9DE0E121}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D20DCB18-E290-4835-890F-77DC9DE0E121}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B64FA621-6E2F-40F6-9BC6-9BD197780F15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B64FA621-6E2F-40F6-9BC6-9BD197780F15}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B64FA621-6E2F-40F6-9BC6-9BD197780F15}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B64FA621-6E2F-40F6-9BC6-9BD197780F15}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B5FD78BF-1435-48EE-82F8-F67F29C9E96C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B5FD78BF-1435-48EE-82F8-F67F29C9E96C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B5FD78BF-1435-48EE-82F8-F67F29C9E96C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B5FD78BF-1435-48EE-82F8-F67F29C9E96C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ABB12A97-2F51-4942-B89D-58AAEAA50CAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ABB12A97-2F51-4942-B89D-58AAEAA50CAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ABB12A97-2F51-4942-B89D-58AAEAA50CAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ABB12A97-2F51-4942-B89D-58AAEAA50CAF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D20DCB18-E290-4835-890F-77DC9DE0E121} = {14EC08F2-D32A-4E7D-8FCC-7F07F87274D8}
+		{1D48773F-1C4A-465C-B21C-9971948A788D} = {1C224974-28C6-40CB-AF50-DDA8B8C50074}
+		{B64FA621-6E2F-40F6-9BC6-9BD197780F15} = {1D48773F-1C4A-465C-B21C-9971948A788D}
+		{CF74D106-164B-4A52-ADE3-3C6843BBC78D} = {1C224974-28C6-40CB-AF50-DDA8B8C50074}
+		{B5FD78BF-1435-48EE-82F8-F67F29C9E96C} = {CF74D106-164B-4A52-ADE3-3C6843BBC78D}
+		{ABB12A97-2F51-4942-B89D-58AAEAA50CAF} = {1D48773F-1C4A-465C-B21C-9971948A788D}
+	EndGlobalSection
+EndGlobal
