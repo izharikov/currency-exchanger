@@ -7,8 +7,8 @@ namespace CommerceExchanger.Core.Services.Base
 {
     public class Exchanger : IExchanger
     {
-        protected RoundCalculator RoundCalculator;
         protected IExchangeRateProvider ExchangeRateProvider;
+        protected RoundCalculator RoundCalculator;
 
         public Exchanger(RoundCalculator roundCalculator, IExchangeRateProvider exchangeRateProvider)
         {
@@ -16,11 +16,11 @@ namespace CommerceExchanger.Core.Services.Base
             ExchangeRateProvider = exchangeRateProvider;
         }
 
-        public async Task<ExchangeResult> Exchange(ExchangeRequest request)
+        public async Task<ExchangeResult> ExchangeAsync(ExchangeRateRequest request, decimal amount)
         {
             var initialRate = await GetRate(request);
             var rate = RoundCalculator.EnsureRate(initialRate);
-            var amount = RoundCalculator.EnsureExchange(request.Amount, rate);
+            var resultAmount = RoundCalculator.EnsureExchange(amount, rate);
             return new ExchangeResult(request.To, amount);
         }
 
@@ -30,7 +30,8 @@ namespace CommerceExchanger.Core.Services.Base
             {
                 return 1;
             }
-            var initialRate = (await ExchangeRateProvider.GetExchangeRate(request)).Value;
+
+            var initialRate = (await ExchangeRateProvider.GetExchangeRateAsync(request)).Value;
             if (initialRate > 0)
             {
                 return initialRate;

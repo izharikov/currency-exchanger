@@ -16,6 +16,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommerceExchanger.Web", "sr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommerceExchanger.Utils", "src\core\CommerceExchanger.Utils\CommerceExchanger.Utils.csproj", "{ABB12A97-2F51-4942-B89D-58AAEAA50CAF}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "integrations", "integrations", "{CE141360-B690-4FD8-A4AE-DA3020E4CCE6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommerceExchanger.Integrations.RateProviders", "src\integrations\CommerceExchanger.Integrations.RateProviders\CommerceExchanger.Integrations.RateProviders.csproj", "{2E774453-B13A-4E88-A870-6D3623890A46}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommerceExchanger.Integrations.RateProviders.Test", "test\CommerceExchanger.Integrations.RateProviders.Test\CommerceExchanger.Integrations.RateProviders.Test.csproj", "{B0CC9C7A-AA51-4579-8DC6-566205996597}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommerceExchanger.Integrations.Storage", "src\integrations\CommerceExchanger.Integrations.Storage\CommerceExchanger.Integrations.Storage.csproj", "{C3A58529-E84E-4490-90A9-B89A3FE0D17D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,6 +46,18 @@ Global
 		{ABB12A97-2F51-4942-B89D-58AAEAA50CAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ABB12A97-2F51-4942-B89D-58AAEAA50CAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ABB12A97-2F51-4942-B89D-58AAEAA50CAF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E774453-B13A-4E88-A870-6D3623890A46}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E774453-B13A-4E88-A870-6D3623890A46}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E774453-B13A-4E88-A870-6D3623890A46}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E774453-B13A-4E88-A870-6D3623890A46}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B0CC9C7A-AA51-4579-8DC6-566205996597}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0CC9C7A-AA51-4579-8DC6-566205996597}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0CC9C7A-AA51-4579-8DC6-566205996597}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0CC9C7A-AA51-4579-8DC6-566205996597}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3A58529-E84E-4490-90A9-B89A3FE0D17D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3A58529-E84E-4490-90A9-B89A3FE0D17D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3A58529-E84E-4490-90A9-B89A3FE0D17D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3A58529-E84E-4490-90A9-B89A3FE0D17D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{D20DCB18-E290-4835-890F-77DC9DE0E121} = {14EC08F2-D32A-4E7D-8FCC-7F07F87274D8}
@@ -46,5 +66,9 @@ Global
 		{CF74D106-164B-4A52-ADE3-3C6843BBC78D} = {1C224974-28C6-40CB-AF50-DDA8B8C50074}
 		{B5FD78BF-1435-48EE-82F8-F67F29C9E96C} = {CF74D106-164B-4A52-ADE3-3C6843BBC78D}
 		{ABB12A97-2F51-4942-B89D-58AAEAA50CAF} = {1D48773F-1C4A-465C-B21C-9971948A788D}
+		{CE141360-B690-4FD8-A4AE-DA3020E4CCE6} = {1C224974-28C6-40CB-AF50-DDA8B8C50074}
+		{2E774453-B13A-4E88-A870-6D3623890A46} = {CE141360-B690-4FD8-A4AE-DA3020E4CCE6}
+		{B0CC9C7A-AA51-4579-8DC6-566205996597} = {14EC08F2-D32A-4E7D-8FCC-7F07F87274D8}
+		{C3A58529-E84E-4490-90A9-B89A3FE0D17D} = {CE141360-B690-4FD8-A4AE-DA3020E4CCE6}
 	EndGlobalSection
 EndGlobal

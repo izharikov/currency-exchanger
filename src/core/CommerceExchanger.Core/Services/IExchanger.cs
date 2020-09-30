@@ -5,6 +5,6 @@ namespace CommerceExchanger.Core.Services
 {
     public interface IExchanger
     {
-        Task<ExchangeResult> Exchange(ExchangeRequest request);
+        Task<ExchangeResult> ExchangeAsync(ExchangeRateRequest request, decimal amount);
     }
 }

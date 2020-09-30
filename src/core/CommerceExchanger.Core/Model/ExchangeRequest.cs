@@ -2,21 +2,17 @@
 
 namespace CommerceExchanger.Core.Model
 {
-    public class ExchangeRequest: ExchangeRateRequest
+    public struct ExchangeRateRequest
     {
-        public decimal Amount { get; set; } = 1;
-    }
-    
-    public class ExchangeRateRequest
-    {
-        public Currency From { get; set; }
-        public Currency To { get; set; }
-        public DateTimeOffset Date { get; set; } = DateTimeOffset.Now;
+        public Currency From { get; }
+        public Currency To { get; }
+        public DateTimeOffset Date { get; }
 
-        public ExchangeRateRequest(Currency from = null, Currency to = null)
+        public ExchangeRateRequest(Currency from = null, Currency to = null, DateTimeOffset? date = null)
         {
             From = from;
             To = to;
+            Date = date ?? DateTimeOffset.Now;
         }
     }
 }

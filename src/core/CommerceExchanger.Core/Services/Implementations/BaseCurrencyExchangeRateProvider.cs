@@ -8,38 +8,44 @@ namespace CommerceExchanger.Core.Services.Implementations
 {
     public class BaseCurrencyExchangeRateProvider : IExchangeRateProvider
     {
-        private readonly RoundCalculator _roundCalculator;
-        private readonly IExchangeRateStorage _exchangeRateStorage;
         private readonly Currency _baseCurrency;
+        private readonly ExchangeRetriever _exchangeRetriever;
+        private readonly RoundCalculator _roundCalculator;
 
         public BaseCurrencyExchangeRateProvider(Currency baseCurrency,
-            IExchangeRateStorage exchangeRateStorage, RoundCalculator roundCalculator)
+            ExchangeRetriever exchangeRetriever, RoundCalculator roundCalculator)
         {
-            _exchangeRateStorage = exchangeRateStorage;
+            _exchangeRetriever = exchangeRetriever;
             _baseCurrency = baseCurrency;
             _roundCalculator = roundCalculator;
         }
 
-        public async Task<ExchangeResult> GetExchangeRate(ExchangeRateRequest request)
+        public async Task<ExchangeResult> GetExchangeRateAsync(ExchangeRateRequest request)
         {
-            var fromRate = await GetExchangeRateToBaseCurrency(request.From);
-            var toRate = await GetExchangeRateToBaseCurrency(request.To);
-            return new ExchangeResult(request.To, _roundCalculator.EnsureRate(fromRate / toRate));
+            var result = await _exchangeRetriever.Retrieve(request);
+            // TODO: handle currency not found
+            return new ExchangeResult(request.To, _roundCalculator.EnsureRate(result?.Value ?? -1));
+        }
+
+        public Task<IEnumerable<Currency>> GetAvailableCurrenciesAsync()
+        {
+            return _exchangeRetriever.GetCurrenciesAsync();
         }
 
         protected virtual async Task<decimal> GetExchangeRateToBaseCurrency(Currency currency)
         {
-            if (await _exchangeRateStorage.Get(new ExchangeRateRequest(currency, _baseCurrency), out var rate))
+            if (Equals(currency, _baseCurrency))
             {
-                return rate;
+                return 1;
+            }
+
+            var result = await _exchangeRetriever.Retrieve(new ExchangeRateRequest(currency, _baseCurrency));
+            if (result != null)
+            {
+                return result.Value;
             }
 
             throw new CurrencyExchangeException(currency);
-        }
-
-        public Task<IEnumerable<Currency>> GetAvailableCurrencies()
-        {
-            return _exchangeRateStorage.GetCurrencies();
         }
     }
 }

@@ -1,7 +1,7 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text.Json;
 using System.Text.Json.Serialization;
+using CommerceExchanger.Core.Json.Converters;
 
 namespace CommerceExchanger.Core.Model
 {
@@ -9,12 +9,21 @@ namespace CommerceExchanger.Core.Model
     [DebuggerDisplay("Currency = {" + nameof(Value) + "}")]
     public class Currency
     {
-        public string Value { get; }
+        private static readonly IDictionary<string, Currency> _currencies = new Dictionary<string, Currency>();
 
-        public Currency(string value)
+        public static readonly Currency USD = GetCurrency("USD");
+        public static readonly Currency EUR = GetCurrency("EUR");
+        public static readonly Currency BYN = GetCurrency("BYN");
+        public static readonly Currency RUB = GetCurrency("RUB");
+
+        public static readonly IEqualityComparer<Currency> DefaultComparer = new CurrencyEqualityComparer();
+
+        private Currency(string value)
         {
             Value = value;
         }
+
+        public string Value { get; }
 
         protected bool Equals(Currency other)
         {
@@ -23,32 +32,60 @@ namespace CommerceExchanger.Core.Model
 
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj)) return false;
-            if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
+            if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+
+            if (obj.GetType() != GetType())
+            {
+                return false;
+            }
+
             return Equals((Currency) obj);
         }
 
         public override int GetHashCode()
         {
-            return (Value != null ? Value.GetHashCode() : 0);
+            return Value != null ? Value.GetHashCode() : 0;
         }
 
-        public static readonly Currency USD = new Currency("USD");
-        public static readonly Currency EUR = new Currency("EUR");
-        public static readonly Currency BYN = new Currency("BYN");
-    }
-
-    public class CurrencyJsonConverter : JsonConverter<Currency>
-    {
-        public override Currency Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        public override string ToString()
         {
-            return new Currency(reader.GetString());
+            return $"[{Value}]";
         }
 
-        public override void Write(Utf8JsonWriter writer, Currency value, JsonSerializerOptions options)
+        public static Currency GetCurrency(string code)
         {
-            writer.WriteStringValue(value.Value);
+            if (_currencies.ContainsKey(code))
+            {
+                return _currencies[code];
+            }
+
+            return _currencies[code] = new Currency(code);
+        }
+
+        public static IEnumerable<Currency> GetAll()
+        {
+            return _currencies.Values;
+        }
+
+        private class CurrencyEqualityComparer : IEqualityComparer<Currency>
+        {
+            public bool Equals(Currency x, Currency y)
+            {
+                return x != null && x.Equals(y);
+            }
+
+            public int GetHashCode(Currency obj)
+            {
+                return obj?.GetHashCode() ?? 0;
+            }
         }
     }
 }

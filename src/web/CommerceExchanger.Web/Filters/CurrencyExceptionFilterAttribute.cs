@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace CommerceExchanger.Web.Filters
 {
-    public class CurrencyExceptionFilterAttribute: ExceptionFilterAttribute
+    public class CurrencyExceptionFilterAttribute : ExceptionFilterAttribute
     {
         public override async Task OnExceptionAsync(ExceptionContext context)
         {
@@ -19,6 +19,7 @@ namespace CommerceExchanger.Web.Filters
                 context.ExceptionHandled = true;
                 await context.HttpContext.Response.WriteAsync(result);
             }
+
             await base.OnExceptionAsync(context);
         }
     }

@@ -1,24 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
 using CommerceExchanger.Core.Arithmetic;
-using CommerceExchanger.Core.Exceptions;
 using CommerceExchanger.Core.Model;
 using CommerceExchanger.Core.Services;
 using CommerceExchanger.Core.Services.Base;
 using CommerceExchanger.Core.Services.Implementations;
+using CommerceExchanger.Integrations.RateProviders.Extensions;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 namespace CommerceExchanger.Web
 {
@@ -35,23 +25,19 @@ namespace CommerceExchanger.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<RoundCalculator>();
-            services.AddSingleton<IExchangeRateStorage>((_) =>
-            {
-                var inMemoryStorage = new InMemoryExchangeRateStorage();
-                inMemoryStorage.Add(new ExchangeRateRequest(Currency.EUR, Currency.EUR), 1);
-                inMemoryStorage.Add(new ExchangeRateRequest(Currency.BYN, Currency.EUR), 0.37M);
-                inMemoryStorage.Add(new ExchangeRateRequest(Currency.USD, Currency.EUR), 0.89M);
-                return inMemoryStorage;
-            });
+            services.AddSingleton<ExchangeRetriever>();
+            services.AddSingleton<IExchangeRateStorage, InMemoryExchangeRateStorage>();
             services.AddSingleton<IExchangeRateProvider>(serviceCollection =>
             {
                 var rateProvider =
                     new BaseCurrencyExchangeRateProvider(
-                        Currency.EUR, serviceCollection.GetRequiredService<IExchangeRateStorage>(),
+                        Currency.USD, serviceCollection.GetRequiredService<ExchangeRetriever>(),
                         serviceCollection.GetRequiredService<RoundCalculator>());
                 return rateProvider;
             });
             services.AddSingleton<IExchanger, Exchanger>();
+            services.AddHttpClient();
+            services.AddRateProviders();
             services.AddControllers();
         }
 
@@ -62,7 +48,7 @@ namespace CommerceExchanger.Web
             {
                 app.UseDeveloperExceptionPage();
             }
-            
+
             app.UseHttpsRedirection();
 
             app.UseRouting();

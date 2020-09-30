@@ -1,9 +1,9 @@
 ﻿namespace CommerceExchanger.Core.Model
 {
-    public class ExchangeResult
+    public struct ExchangeResult
     {
-        public decimal Value { get; set; }
-        public Currency Currency { get; set; }
+        public decimal Value { get; }
+        public Currency Currency { get; }
 
         public ExchangeResult(Currency currency = null, decimal value = -1)
         {

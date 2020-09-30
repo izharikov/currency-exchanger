@@ -6,7 +6,7 @@ namespace CommerceExchanger.Core.Services
 {
     public interface IExchangeRateProvider
     {
-        Task<ExchangeResult> GetExchangeRate(ExchangeRateRequest request);
-        Task<IEnumerable<Currency>> GetAvailableCurrencies();
+        Task<ExchangeResult> GetExchangeRateAsync(ExchangeRateRequest request);
+        Task<IEnumerable<Currency>> GetAvailableCurrenciesAsync();
     }
 }

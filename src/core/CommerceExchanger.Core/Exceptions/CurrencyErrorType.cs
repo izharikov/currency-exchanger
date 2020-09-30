@@ -2,6 +2,7 @@
 {
     public enum CurrencyErrorType
     {
-        CurrencyNotFound, CurrencyExchangeNotAllowed
+        CurrencyNotFound,
+        CurrencyExchangeNotAllowed
     }
 }

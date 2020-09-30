@@ -6,10 +6,8 @@ namespace CommerceExchanger.Core.Exceptions
 {
     public class CurrencyExchangeException : ApplicationException
     {
-        public CurrencyErrorType ErrorType { get; set; }
-        public Currency[] Currencies { get; set; }
-
-        private CurrencyExchangeException(string message, CurrencyErrorType errorType, params Currency[] currencies) : base(message)
+        private CurrencyExchangeException(string message, CurrencyErrorType errorType, params Currency[] currencies) :
+            base(message)
         {
             ErrorType = errorType;
             Currencies = currencies;
@@ -25,6 +23,9 @@ namespace CommerceExchanger.Core.Exceptions
             CurrencyErrorType.CurrencyExchangeNotAllowed, from, to)
         {
         }
+
+        public CurrencyErrorType ErrorType { get; set; }
+        public Currency[] Currencies { get; set; }
 
         public CurrencyExchangeExceptionJsonResult ToJson()
         {

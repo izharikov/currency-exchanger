@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using CommerceExchanger.Core.Model;
 
@@ -6,35 +8,59 @@ namespace CommerceExchanger.Core.Services.Implementations
 {
     public class InMemoryExchangeRateStorage : IExchangeRateStorage
     {
+        private readonly IDictionary<string, ISet<Currency>> _currencies = new Dictionary<string, ISet<Currency>>();
         private readonly IDictionary<string, decimal> _storage = new Dictionary<string, decimal>();
-        private readonly ISet<Currency> _currencies = new HashSet<Currency>();
 
-        public Task AddOrUpdate(ExchangeRateRequest model, decimal rate)
+        public Task AddOrUpdateAsync(ICollection<RateResponse> rates, string rateProvider)
         {
-            Add(model, rate);
+            if (!rates.Any())
+            {
+                return Task.CompletedTask;
+            }
+
+            foreach (var rate in rates)
+            {
+                Add(new ExchangeRateRequest(rate.From, rate.To, rate.Date), rate.Value, rateProvider);
+                Add(new ExchangeRateRequest(rate.To, rate.From, rate.Date), 1 / rate.Value, rateProvider);
+            }
+
             return Task.CompletedTask;
         }
 
-        public void Add(ExchangeRateRequest model, decimal rate)
+        public Task<bool> TryGetAsync(ExchangeRateRequest model, out decimal rate, string rateProvider)
         {
-            _storage[GetCacheKey(model)] = rate;
-            _currencies.Add(model.From);
-            _currencies.Add(model.To);
+            return Task.FromResult(_storage.TryGetValue(GetCacheKey(model, rateProvider), out rate));
         }
 
-        public Task<bool> Get(ExchangeRateRequest model, out decimal rate)
+        public Task<ISet<Currency>> GetCurrenciesAsync(string rateProvider)
         {
-            return Task.FromResult(_storage.TryGetValue(GetCacheKey(model), out rate));
+            if (rateProvider == null)
+            {
+                throw new ArgumentException(nameof(rateProvider));
+            }
+
+            ISet<Currency> result = null;
+            if (_currencies.ContainsKey(rateProvider))
+            {
+                result = _currencies[rateProvider];
+            }
+            return Task.FromResult(result ?? new HashSet<Currency>());
         }
 
-        public Task<IEnumerable<Currency>> GetCurrencies()
+        public void Add(ExchangeRateRequest model, decimal rate, string rateProvider)
         {
-            return Task.FromResult((IEnumerable<Currency>) _currencies);
+            _storage[GetCacheKey(model, rateProvider)] = rate;
+            if (!_currencies.ContainsKey(rateProvider))
+            {
+                _currencies[rateProvider] = new HashSet<Currency>();
+            }
+            _currencies[rateProvider].Add(model.From);
+            _currencies[rateProvider].Add(model.To);
         }
 
-        private static string GetCacheKey(ExchangeRateRequest request)
+        private static string GetCacheKey(ExchangeRateRequest request, string rateProvider)
         {
-            return $"{request.From.Value}_{request.To.Value}";
+            return $"{rateProvider}_{request.From.Value}_{request.To.Value}_{request.Date:d}";
         }
     }
 }

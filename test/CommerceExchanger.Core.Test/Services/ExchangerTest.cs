@@ -11,48 +11,36 @@ namespace CommerceExchanger.Core.Test.Services
 {
     public class ExchangerTest
     {
-        private IExchanger _exchanger;
-
-        private const decimal SampleExchangeRate = 0.23M;
-
         public ExchangerTest()
         {
             var mock =
                 new Mock<IExchangeRateProvider>();
             mock
-                .Setup(x => x.GetExchangeRate(
+                .Setup(x => x.GetExchangeRateAsync(
                     It.Is<ExchangeRateRequest>(m =>
                         Equals(m.From, Currency.EUR) && Equals(m.To, Currency.BYN))))
                 .Returns(Task.FromResult(
-                    new ExchangeResult
-                    {
-                        Value = SampleExchangeRate
-                    }));
+                    new ExchangeResult(Currency.BYN, SampleExchangeRate)));
             _exchanger = new Exchanger(new RoundCalculator(), mock.Object);
         }
 
-        [Fact]
-        public async Task ValidateExchange()
-        {
-            Assert.Equal(SampleExchangeRate * 10, (await _exchanger.Exchange(new ExchangeRequest()
-            {
-                From = Currency.EUR,
-                To = Currency.BYN,
-                Amount = 10
-            })).Value, 4);
-        }
+        private readonly IExchanger _exchanger;
+
+        private const decimal SampleExchangeRate = 0.23M;
 
         [Fact]
         public async Task ExchangeShouldThrowException()
         {
             var exception = await Assert.ThrowsAsync<CurrencyExchangeException>(async () =>
-                await _exchanger.Exchange(new ExchangeRequest()
-                {
-                    From = Currency.USD,
-                    To = Currency.BYN,
-                    Amount = 10
-                }));
+                await _exchanger.ExchangeAsync(new ExchangeRateRequest(Currency.USD, Currency.BYN), 10));
             Assert.Equal(CurrencyErrorType.CurrencyExchangeNotAllowed, exception.ErrorType);
+        }
+
+        [Fact]
+        public async Task ValidateExchange()
+        {
+            Assert.Equal(SampleExchangeRate * 10,
+                (await _exchanger.ExchangeAsync(new ExchangeRateRequest(Currency.EUR, Currency.BYN), 10)).Value, 4);
         }
     }
 }

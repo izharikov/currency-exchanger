@@ -19,33 +19,28 @@ namespace CommerceExchanger.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<Currency>> All()
-        {
-            return await _exchangeRateProvider.GetAvailableCurrencies();
-        }
-
-        [HttpGet]
         public async Task<ExchangeResult> Index(string from, string to)
         {
-            return await _exchangeRateProvider.GetExchangeRate(new ExchangeRateRequest()
-                {
-                    From = new Currency(from),
-                    To = new Currency(to)
-                }
-            );
+            return await _exchangeRateProvider.GetExchangeRateAsync(new ExchangeRateRequest(Currency.GetCurrency(from),
+                Currency.GetCurrency(to)));
         }
 
         [HttpGet]
-        public async Task<IEnumerable<ExchangeResult>> Currency(string currency)
+        public async Task<IEnumerable<ExchangeResult>> ByCurrency(string currency)
         {
-            var sourceCurrency = new Currency(currency);
-            var allCurrencies = await _exchangeRateProvider.GetAvailableCurrencies();
-            return await allCurrencies.Except(sourceCurrency)
-                .Select(c => _exchangeRateProvider.GetExchangeRate(new ExchangeRateRequest()
-                {
-                    From = sourceCurrency,
-                    To = c
-                }));
+            var sourceCurrency = Currency.GetCurrency(currency);
+            var allCurrencies = (await _exchangeRateProvider.GetAvailableCurrenciesAsync()).ToList();
+            return await ExchangeRateForAllCurrencies(sourceCurrency,
+                allCurrencies.ExceptSingle(sourceCurrency, Currency.DefaultComparer));
+        }
+
+        private IEnumerable<Task<ExchangeResult>> ExchangeRateForAllCurrencies(Currency from,
+            IEnumerable<Currency> currencies)
+        {
+            foreach (var currency in currencies)
+            {
+                yield return _exchangeRateProvider.GetExchangeRateAsync(new ExchangeRateRequest(@from, currency));
+            }
         }
     }
 }

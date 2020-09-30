@@ -9,7 +9,7 @@ namespace CommerceExchanger.Core.Arithmetic
 
         private readonly int _amountDecimalCount;
         private readonly int _exchangeDecimalCount;
-        
+
         public RoundCalculator()
         {
             _amountDecimalCount = AmountDecimalDefaultCount;
@@ -26,7 +26,7 @@ namespace CommerceExchanger.Core.Arithmetic
         {
             return Math.Round(rate, _exchangeDecimalCount);
         }
-        
+
         public decimal EnsureExchange(decimal amount, decimal rate)
         {
             return Math.Round(amount * rate, _amountDecimalCount);
